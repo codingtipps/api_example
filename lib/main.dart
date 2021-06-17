@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:api_app_example/album.dart';
+import 'package:api_app_example/models/album.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,10 +29,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<List<Album>> futureAlbum;
-
-  List question = [];
-
   Future<List<Album>> fetchAlbums() async {
     var uri = 'https://jsonplaceholder.typicode.com/albums/1/photos';
 
@@ -43,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
       List<Album> albums = responseJson.map((e) => Album.fromJson(e)).toList();
       return albums;
     } else {
-      throw Exception('Failed to load Data');
+      throw Exception('Failed to load Album Data');
     }
   }
 
@@ -54,7 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Working with APIs'),
       ),
       body: FutureBuilder<List<Album>>(
-        future: fetchAlbums(),
+        future: fetchAlbums().catchError((error) {
+          print('$error');
+        }),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Album> albums = snapshot.data!;
