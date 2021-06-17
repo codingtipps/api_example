@@ -1,7 +1,9 @@
 import 'dart:convert';
 
-import 'package:api_app_example/models/album.dart';
+import 'package:api_app_example/models/photo.dart';
 import 'package:flutter/material.dart';
+
+
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -29,17 +31,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<List<Album>> fetchAlbums() async {
+  
+  
+  
+  Future<List<Photo>> fetchPhotos() async {
     var uri = 'https://jsonplaceholder.typicode.com/albums/1/photos';
 
     final response = await http.get(Uri.parse(uri));
 
     if (response.statusCode == 200) {
       List responseJson = jsonDecode(response.body);
-      List<Album> albums = responseJson.map((e) => Album.fromJson(e)).toList();
-      return albums;
+      List<Photo> photos = responseJson.map((e) => Photo.fromJson(e)).toList();
+      return photos;
     } else {
-      throw Exception('Failed to load Album Data');
+      throw Exception('Failed to load Photo Data');
     }
   }
 
@@ -49,21 +54,19 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Working with APIs'),
       ),
-      body: FutureBuilder<List<Album>>(
-        future: fetchAlbums().catchError((error) {
-          print('$error');
-        }),
+      body: FutureBuilder<List<Photo>>(
+        future: fetchPhotos(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<Album> albums = snapshot.data!;
+            List<Photo> photos = snapshot.data!;
             return new ListView.builder(
               itemBuilder: (context, index) {
                 return Column(
                   children: [
                     ListTile(
-                      leading: Image.network(albums[index].thumbnailUrl),
-                      title: Text(albums[index].id.toString()),
-                      subtitle: Text(albums[index].title),
+                      leading: Image.network(photos[index].thumbnailUrl),
+                      title: Text(photos[index].id.toString()),
+                      subtitle: Text(photos[index].title),
                     ),
                     Divider(
                       thickness: 2.0,
