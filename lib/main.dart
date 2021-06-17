@@ -64,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     ListTile(
                       leading: Image.network(albums[index].thumbnailUrl),
-                      title: Text(albums[index].title),
-                      subtitle: Text(albums[index].url),
+                      title: Text(albums[index].id.toString()),
+                      subtitle: Text(albums[index].title),
                     ),
                     Divider(
                       thickness: 2.0,
@@ -73,11 +73,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 );
               },
+              itemCount: snapshot.data!.length,
             );
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
